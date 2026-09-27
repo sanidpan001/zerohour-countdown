@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZeroHour — Free Online Countdown Timer | Fullscreen, Shareable &amp; Festival Presets</title>
+<meta name="description" content="ZeroHour is a free online countdown timer with a cinematic fullscreen stage, multiple saved countdowns, shareable countdown links, and one-tap festival presets for Diwali, Christmas and New Year. No signup, unlimited free usage.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{ --glow:#EF4444; }
+  html{ scroll-behavior:smooth; }
+  body{ background:#050510; color:#EDEDF2; font-family:'Inter',system-ui,sans-serif; }
+  .digits{ font-family:'Orbitron','Inter',monospace; font-variant-numeric:tabular-nums; }
+  .glow-text{ color:#fff; text-shadow:0 0 18px rgba(239,68,68,.85), 0 0 60px rgba(239,68,68,.45), 0 0 120px rgba(239,68,68,.25); }
+  .glow-card{ background:rgba(239,68,68,.06); border:1px solid rgba(239,68,68,.28); box-shadow:0 0 24px rgba(239,68,68,.18), inset 0 0 24px rgba(239,68,68,.05); }
+  .stage-vignette{ background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(239,68,68,.14), transparent 60%),
+      radial-gradient(ellipse 120% 90% at 50% 110%, rgba(20,20,60,.55), transparent 60%),
+      #050510; }
+  .film-scan{ position:relative; }
+  .film-scan::after{ content:""; position:absolute; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px); }
+  .btn-glow{ background:#EF4444; box-shadow:0 0 18px rgba(239,68,68,.55); transition:transform .15s ease, box-shadow .15s ease; }
+  .btn-glow:hover{ transform:translateY(-1px); box-shadow:0 0 28px rgba(239,68,68,.75); }
+  .btn-ghost{ border:1px solid rgba(239,68,68,.4); transition:background .15s ease; }
+  .btn-ghost:hover{ background:rgba(239,68,68,.12); }
+  input,select{ color-scheme:dark; }
+  .flash-zero{ animation:flashzero 1s ease-in-out infinite; }
+  @keyframes flashzero{ 0%,100%{ opacity:1; } 50%{ opacity:.45; } }
+  @media (prefers-reduced-motion:reduce){ .flash-zero{ animation:none; } html{ scroll-behavior:auto; } }
+  #stage:fullscreen{ background:#050510; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; }
+  #stage:fullscreen .digits-main{ font-size:clamp(3rem,14vw,11rem) !important; }
+  #stage:fullscreen .stage-hide{ display:none !important; }
+  #stage:fullscreen .fs-only{ display:block !important; }
+  .fs-only{ display:none; }
+  .article-body h2{ font-size:1.5rem; font-weight:700; margin:2rem 0 .75rem; color:#fff; }
+  .article-body h3{ font-size:1.15rem; font-weight:600; margin:1.5rem 0 .5rem; color:#FECACA; }
+  .article-body p{ margin:.75rem 0; line-height:1.75; color:#C9C9D4; }
+  .article-body ul{ list-style:disc; margin:.5rem 0 .5rem 1.4rem; line-height:1.75; color:#C9C9D4; }
+  .article-body strong{ color:#fff; }
+</style>
+</head>
+<body id="top" class="min-h-screen antialiased">
+
+<!-- ======================= HEADER ======================= -->
+<header class="sticky top-0 z-50 border-b border-red-900/40 bg-[#050510]/90 backdrop-blur">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 h-14 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-2">
+      <span class="digits inline-flex h-8 w-8 items-center justify-center rounded-md bg-red-600 text-white font-black text-sm shadow-[0_0_14px_rgba(239,68,68,.8)]">0h</span>
+      <span class="digits text-xl font-black tracking-widest text-white">ZERO<span class="text-red-500">HOUR</span></span>
+    </a>
+    <nav class="flex items-center gap-5 text-sm font-medium">
+      <a href="#top" class="text-slate-300 hover:text-white">Home</a>
+      <a href="https://fixoraa.tech" class="text-slate-300 hover:text-white">More Tools</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ======================= TOP AD (verbatim) ======================= -->
+<div class="no-print mx-auto max-w-6xl px-4 sm:px-6 pt-4" role="complementary" aria-label="Advertisement">
+  <div class="mx-auto text-center" style="max-width:728px">
+    <span class="block text-[10px] tracking-[0.18em] uppercase text-slate-400 mb-1.5">Advertisement</span>
+    <div class="flex justify-center overflow-hidden">
+      <div class="origin-top scale-[0.44] sm:scale-100 shrink-0">
+        <script>
+          atOptions = { 'key' : '4e68ac77881c17fe128a46565d9a4e8c', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+        </script>
+        <script src="https://www.highrevenueformat.com/4e68ac77881c17fe128a46565d9a4e8c/invoke.js"></script>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= HERO ======================= -->
+<section class="mx-auto max-w-6xl px-4 sm:px-6 pt-8 pb-2 text-center">
+  <span class="inline-block rounded-full border border-red-500/50 bg-red-500/10 px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-red-300 shadow-[0_0_16px_rgba(239,68,68,.25)]">Unlimited Free Usage</span>
+  <h1 class="mt-4 text-3xl sm:text-5xl font-black tracking-tight text-white">The countdown stage for <span class="glow-text">every big moment</span></h1>
+  <p class="mt-3 max-w-2xl mx-auto text-slate-400">Set a date, hit the stage, go fullscreen. ZeroHour saves all your countdowns in your browser, shares them as links, and knows when Diwali, Christmas and New Year are coming.</p>
+</section>
+
+<!-- ======================= STAGE ======================= -->
+<main class="mx-auto max-w-6xl px-4 sm:px-6 py-6">
+  <div id="stage" class="stage-vignette film-scan relative overflow-hidden rounded-2xl border border-red-900/50 p-6 sm:p-10 text-center">
+    <p class="fs-only digits text-xs tracking-[0.4em] text-red-400 uppercase mb-2">ZeroHour · Presentation Mode</p>
+    <p class="text-xs tracking-[0.3em] uppercase text-red-400/80 stage-hide">Now showing</p>
+    <h2 id="stageName" class="digits mt-1 text-2xl sm:text-4xl font-bold text-white">New Year Countdown</h2>
+    <p id="stageTarget" class="mt-1 text-sm text-slate-400"></p>
+
+    <div id="stageDigits" class="mt-6 grid grid-cols-4 gap-2 sm:gap-4 max-w-3xl mx-auto">
+      <div class="glow-card rounded-xl py-4 sm:py-6">
+        <div id="dDays" class="digits digits-main text-4xl sm:text-6xl font-black glow-text">000</div>
+        <div class="mt-1 text-[10px] sm:text-xs tracking-[0.25em] uppercase text-red-300/80">Days</div>
+      </div>
+      <div class="glow-card rounded-xl py-4 sm:py-6">
+        <div id="dHours" class="digits digits-main text-4xl sm:text-6xl font-black glow-text">00</div>
+        <div class="mt-1 text-[10px] sm:text-xs tracking-[0.25em] uppercase text-red-300/80">Hours</div>
+      </div>
+      <div class="glow-card rounded-xl py-4 sm:py-6">
+        <div id="dMins" class="digits digits-main text-4xl sm:text-6xl font-black glow-text">00</div>
+        <div class="mt-1 text-[10px] sm:text-xs tracking-[0.25em] uppercase text-red-300/80">Minutes</div>
+      </div>
+      <div class="glow-card rounded-xl py-4 sm:py-6">
+        <div id="dSecs" class="digits digits-main text-4xl sm:text-6xl font-black glow-text">00</div>
+        <div class="mt-1 text-[10px] sm:text-xs tracking-[0.25em] uppercase text-red-300/80">Seconds</div>
+      </div>
+    </div>
+
+    <p id="stageStatus" class="mt-4 text-sm text-slate-400"></p>
+
+    <div class="stage-hide mt-6 flex flex-wrap items-center justify-center gap-3">
+      <button id="btnFullscreen" class="btn-glow rounded-lg px-5 py-2.5 text-sm font-bold text-white">⛶ Fullscreen stage</button>
+      <button id="btnShareStage" class="btn-ghost rounded-lg px-5 py-2.5 text-sm font-semibold text-red-200">🔗 Copy share link</button>
+      <button id="btnSaveStage" class="btn-ghost rounded-lg px-5 py-2.5 text-sm font-semibold text-red-200">💾 Save this countdown</button>
+      <button id="btnSound" class="btn-ghost rounded-lg px-4 py-2.5 text-sm font-semibold text-red-200" aria-pressed="true">🔔 Sound on</button>
+    </div>
+    <p id="shareMsg" class="stage-hide mt-3 h-5 text-xs text-emerald-300"></p>
+  </div>
+
+  <!-- ======================= CONTROLS ======================= -->
+  <section class="mt-8 grid gap-6 lg:grid-cols-5">
+    <div class="lg:col-span-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-7">
+      <h2 class="text-xl font-bold text-white">Create a countdown</h2>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2">
+        <div>
+          <label for="inName" class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1.5">Event name</label>
+          <input id="inName" type="text" maxlength="60" placeholder="e.g. Product launch" class="w-full rounded-lg border border-white/15 bg-black/40 px-3.5 py-2.5 text-white placeholder-slate-500 outline-none focus:border-red-500">
+        </div>
+        <div>
+          <label for="inDate" class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1.5">Date &amp; time</label>
+          <input id="inDate" type="datetime-local" class="w-full rounded-lg border border-white/15 bg-black/40 px-3.5 py-2.5 text-white outline-none focus:border-red-500">
+        </div>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <button id="btnStart" class="btn-glow rounded-lg px-6 py-2.5 text-sm font-bold text-white">▶ Start countdown</button>
+        <button id="btnAdd" class="btn-ghost rounded-lg px-6 py-2.5 text-sm font-semibold text-red-200">＋ Save for later</button>
+      </div>
+      <p id="formMsg" class="mt-2 h-5 text-xs text-amber-300"></p>
+
+      <h3 class="mt-6 text-sm font-bold uppercase tracking-widest text-slate-300">Quick timers</h3>
+      <div class="mt-2 flex flex-wrap gap-2">
+        <button data-quick="3600" class="btn-ghost rounded-md px-3.5 py-1.5 text-xs font-semibold text-red-100">+1 hour</button>
+        <button data-quick="21600" class="btn-ghost rounded-md px-3.5 py-1.5 text-xs font-semibold text-red-100">+6 hours</button>
+        <button data-quick="86400" class="btn-ghost rounded-md px-3.5 py-1.5 text-xs font-semibold text-red-100">+24 hours</button>
+        <button data-quick="604800" class="btn-ghost rounded-md px-3.5 py-1.5 text-xs font-semibold text-red-100">+7 days</button>
+        <button data-quick="2592000" class="btn-ghost rounded-md px-3.5 py-1.5 text-xs font-semibold text-red-100">+30 days</button>
+      </div>
+
+      <h3 class="mt-6 text-sm font-bold uppercase tracking-widest text-slate-300">Festival presets <span class="normal-case font-normal text-slate-500">— auto-jumps to the upcoming one</span></h3>
+      <div class="mt-2 flex flex-wrap gap-2">
+        <button data-fest="diwali" class="btn-ghost rounded-md px-4 py-2 text-xs font-bold text-amber-200">🪔 Diwali <span id="diwaliDate" class="font-normal text-amber-200/70"></span></button>
+        <button data-fest="christmas" class="btn-ghost rounded-md px-4 py-2 text-xs font-bold text-emerald-200">🎄 Christmas <span id="christmasDate" class="font-normal text-emerald-200/70"></span></button>
+        <button data-fest="newyear" class="btn-ghost rounded-md px-4 py-2 text-xs font-bold text-sky-200">🎆 New Year <span id="newyearDate" class="font-normal text-sky-200/70"></span></button>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-7">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold text-white">Saved countdowns</h2>
+        <span id="savedCount" class="text-xs text-slate-500"></span>
+      </div>
+      <p class="mt-1 text-xs text-slate-500">Stored only in this browser. Click one to load it on stage.</p>
+      <div id="savedList" class="mt-4 space-y-3 max-h-80 overflow-y-auto pr-1"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ======================= BOTTOM AD (verbatim) ======================= -->
+<div class="no-print mx-auto max-w-6xl px-4 sm:px-6 pb-4" role="complementary" aria-label="Advertisement">
+  <div class="mx-auto text-center" style="max-width:728px">
+    <span class="block text-[10px] tracking-[0.18em] uppercase text-slate-400 mb-1.5">Advertisement</span>
+    <div class="flex justify-center overflow-hidden">
+      <script async src="https://js.wpadmngr.com/static/adManager.js" data-admpid="464498"></script>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= SEO ARTICLE ======================= -->
+<article id="guide" class="mx-auto max-w-4xl px-4 sm:px-6 py-10 article-body">
+  <h2>The complete guide to online countdown timers</h2>
+  <p>A countdown timer is one of the simplest tools on the internet — and one of the most powerful. At its core, it does a single job: it shows you exactly how much time is left until a moment that matters. A product launch, a wedding, an exam, the festival of Diwali, a rocket launch, the final exam of the semester. The number on the screen ticks down, second by second, and something in the human brain pays attention. This guide explains what countdown timers are, why they work so well, how to use them effectively, and how ZeroHour turns a humble ticking clock into a full presentation stage you can share with anyone.</p>
+
+  <h2>What is a countdown timer?</h2>
+  <p>A countdown timer counts down from the current moment to a fixed point in the future, displaying the remaining time in days, hours, minutes and seconds. It is different from a stopwatch, which counts up from zero to measure elapsed time, and different from a clock, which shows the time of day. The countdown timer answers a very specific question: <strong>how long until X?</strong> Online countdown timers run in the browser and need no installation. You enter an event name and a date, and the page does the rest, updating every second with perfect accuracy based on your device clock.</p>
+  <p>Countdown timers come in two broad families. A <strong>fixed-date countdown</strong> targets a calendar date, such as 25 December or the day of your wedding. A <strong>duration countdown</strong> targets a length of time from now, such as 90 minutes for a focused work session or 48 hours for a flash sale. ZeroHour supports both: pick any date and time, or use the quick-timer buttons to start a countdown one hour, one day or thirty days from now.</p>
+
+  <h2>Why countdown timers work: the psychology of the ticking clock</h2>
+  <p>There is a reason the countdown is a staple of film trailers, rocket launches and New Year celebrations. Psychologists have studied this effect for decades. A visible, ticking deadline does three things to the human mind. First, it creates <strong>anticipation</strong>: the future stops being abstract and becomes something you can watch approaching. Second, it creates <strong>urgency</strong>: a limited window of time makes people act, which is why marketers have used countdowns for flash sales since the early days of e-commerce. Third, it creates <strong>focus</strong>: a 25-minute countdown on your desk is the entire engine behind the Pomodoro technique, one of the most popular productivity methods in the world.</p>
+  <p>For events, the effect is emotional rather than practical. Watching the days shrink before a holiday, a concert or a long-awaited trip builds excitement in a way that a static date on a calendar never can. Families keep countdowns to Christmas on the fridge. Couples count down to weddings. Students count down to the end of exams. The timer becomes a small daily ritual — a reminder that something good is on its way.</p>
+
+  <h2>Everyday uses for a countdown timer</h2>
+  <p>Once you start thinking in countdowns, you find them everywhere:</p>
+  <ul>
+    <li><strong>Events and celebrations:</strong> birthdays, anniversaries, weddings, graduations, holidays. Share the link with family so everyone watches the same clock.</li>
+    <li><strong>Product and content launches:</strong> creators and small businesses build hype with a public countdown on a shared screen or a link in their bio.</li>
+    <li><strong>Classrooms and training:</strong> teachers put a fullscreen countdown on the projector to time breaks, quizzes and group activities.</li>
+    <li><strong>Productivity:</strong> time-box deep work sessions, meetings and deadlines with a visible timer.</li>
+    <li><strong>Sports and competitions:</strong> count down to match day, registration deadlines or the start of a tournament.</li>
+    <li><strong>Travel:</strong> the flight, the road trip, the visa appointment — all more exciting with a ticking clock.</li>
+    <li><strong>Exams and admissions:</strong> students track the days left to prepare, and the exact minute a result is announced.</li>
+    <li><strong>Fitness goals:</strong> race day, a marathon, a transformation challenge with a fixed end date.</li>
+  </ul>
+
+  <h2>Festivals move — your countdown should follow</h2>
+  <p>Most countdown timers treat every date as a fixed point you type in by hand. That works for birthdays, but festivals are trickier. Christmas is always 25 December and New Year is always 1 January, but <strong>Diwali moves every year</strong> because it follows the lunisolar Hindu calendar. Diwali fell on 31 October in 2024, 20–21 October in 2025, and falls on 8 November in 2026. Looking up the right date, checking whether it has passed, and typing it in correctly is exactly the kind of friction that makes people abandon a tool.</p>
+  <p>ZeroHour solves this with <strong>festival presets</strong>. One tap on Diwali, Christmas or New Year, and the timer automatically finds the next upcoming occurrence — including the correct Diwali date for the current year from a built-in festival calendar — and starts counting. If this year's Diwali has already passed, it jumps to next year's. This is one of those small features that sounds trivial until you use it, and then every other timer feels broken by comparison.</p>
+
+  <h2>How to use ZeroHour, step by step</h2>
+  <h3>1. Create your countdown</h3>
+  <p>Type an event name — "Flight to Tokyo", "Board exam results", "Sister's wedding" — and pick the date and time. Dates are interpreted in your local timezone, so what you see is what you get. Press <strong>Start countdown</strong> and your event takes over the cinematic stage: huge glowing digits for days, hours, minutes and seconds, ticking every second.</p>
+  <h3>2. Save it for later</h3>
+  <p>Press <strong>Save this countdown</strong> (or the "Save for later" button) and the event is stored in your browser's local storage. Build a whole collection — every deadline, holiday and trip in one place. Your countdowns survive closing the tab, restarting the browser and even rebooting the computer. They never leave your device, so there is nothing to sign up for and nothing to sync.</p>
+  <h3>3. Share it as a link</h3>
+  <p>Every countdown can be turned into a <strong>shareable link</strong>. The event name and the exact target moment are encoded directly in the URL's hash fragment, so the link works anywhere: WhatsApp, email, social media, a QR code. Anyone who opens it sees your countdown live, in their own timezone, with no account and no app to install. This is perfect for families counting down to a wedding together or a team watching a launch deadline.</p>
+  <h3>4. Go fullscreen</h3>
+  <p>Press <strong>Fullscreen stage</strong> and the countdown fills the entire screen with giant glowing digits. Project it at a party, put it on a TV in the office, or use it as a classroom timer. Presentation mode hides all the controls so the audience sees nothing but the clock. Press Escape to return to normal.</p>
+
+  <h2>What happens when the countdown reaches zero?</h2>
+  <p>Most online timers either stop dead or loop awkwardly when time runs out. ZeroHour does something more honest: it flips into <strong>elapsed mode</strong>. The stage dims, the label changes to "Elapsed since", and the clock starts counting <em>up</em> — showing how long ago the moment happened. This is surprisingly useful: "our product launched 14 days, 6 hours ago" is a live stat for a landing page, and "married for 1,204 days" is a lovely thing to keep on a shared screen. When the final second ticks away, the stage flashes "It's time!" and plays a short chime (which you can mute) so you never miss the moment even if you looked away.</p>
+
+  <h2>Accuracy, timezones and the fine print</h2>
+  <p>ZeroHour computes the remaining time from your device's clock, updating once per second. That means two things. First, the countdown is only as accurate as your device clock — if your phone's time is off by two minutes, so is the timer. For everyday events this is irrelevant, but if you are timing something precise, make sure automatic time is enabled in your device settings. Second, shared links encode an absolute moment in time, not a wall-clock reading. If you create a countdown for 8 PM in Mumbai and share it with a friend in London, they will see the same moment expressed in their local time. No mental timezone maths required.</p>
+  <p>One more detail worth knowing: browsers throttle timers in background tabs to save battery. ZeroHour recomputes from the absolute target on every tick rather than decrementing a counter, so even if the tab was asleep for an hour, the displayed time snaps back to exactly correct the moment you return. Your browser tab title also shows a live mini-countdown, so you can keep an eye on the time while working in other tabs.</p>
+
+  <h2>Privacy: your countdowns stay yours</h2>
+  <p>ZeroHour has no accounts, no servers and no tracking of your events. Everything — your saved countdowns, your sound preference — lives in your browser's local storage and never leaves your device. Clearing your browser data will remove your saved countdowns, which is the only way anyone could lose them. There is no signup, no paywall and no watermark: the "Unlimited Free Usage" badge at the top of the page is a promise, not a trial.</p>
+
+  <h2>Tips for countdowns that actually motivate you</h2>
+  <ul>
+    <li><strong>Name it vividly.</strong> "Goa trip!!" beats "Event 3". A name with emotion makes the ticking clock feel personal.</li>
+    <li><strong>Use the fullscreen stage for shared moments.</strong> A countdown on a TV at a party turns waiting into entertainment.</li>
+    <li><strong>Stack your milestones.</strong> Save the big goal and the small steps — exam day, but also each mock test date — and watch them fall one by one.</li>
+    <li><strong>Share the link early.</strong> A shared countdown builds collective excitement; send it to the group chat the day you create it.</li>
+    <li><strong>Let elapsed mode do its job.</strong> Keep the timer running after the event. "Launched 30 days ago" is momentum you can show off.</li>
+    <li><strong>Respect the clock.</strong> For anything where seconds matter — auctions, registrations, live drops — sync your device time first.</li>
+  </ul>
+
+  <h2>Why ZeroHour is different from other countdown sites</h2>
+  <p>The internet has no shortage of countdown timers, and most of them do the basics well: a date picker, four boxes, a ticking clock. ZeroHour was built around the moments where basic is not enough. <strong>Multiple named countdowns</strong> saved in your browser mean you are managing a calendar of anticipation, not a single throwaway timer. <strong>Shareable links</strong> with the target encoded in the URL turn a private tool into a social one. <strong>Fullscreen presentation mode</strong> turns any screen into an event display. <strong>Festival presets</strong> that compute the next Diwali, Christmas and New Year remove the one chore every festival countdown demands. And <strong>elapsed mode</strong> treats the moment after zero as interesting, not as an error state. Put together, it is a countdown timer that respects both the event and the audience watching it.</p>
+  <p>So pick your moment. Name it, date it, put it on the big glowing stage — and watch the future arrive, one second at a time.</p>
+
+  <h2>Frequently asked questions</h2>
+  <div class="space-y-4 mt-4">
+    <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+      <h3 class="!mt-0">Is ZeroHour really free?</h3>
+      <p>Yes. Every feature — unlimited countdowns, shareable links, fullscreen presentation mode, festival presets — is free with no signup, no paywall and no watermark.</p>
+    </div>
+    <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+      <h3 class="!mt-0">Where are my saved countdowns stored?</h3>
+      <p>In your browser's local storage, on your device only. They persist across restarts but are not synced between devices; clearing browser data removes them.</p>
+    </div>
+    <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+      <h3 class="!mt-0">How do shareable countdown links work?</h3>
+      <p>The event name and target moment are encoded in the link's URL hash. Anyone opening the link sees your live countdown in their own timezone — no account needed.</p>
+    </div>
+    <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+      <h3 class="!mt-0">How does the Diwali preset know the right date?</h3>
+      <p>ZeroHour ships with a built-in calendar of upcoming Diwali dates (which shift yearly on the lunisolar calendar) and automatically picks the next one that has not happened yet.</p>
+    </div>
+    <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+      <h3 class="!mt-0">What happens when my countdown reaches zero?</h3>
+      <p>The stage flashes "It's time!", plays a short chime (mutable), then switches to elapsed mode, counting up to show how long ago the moment occurred.</p>
+    </div>
+    <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+      <h3 class="!mt-0">Can I use ZeroHour on a projector or TV?</h3>
+      <p>Yes — the fullscreen stage fills any screen with giant glowing digits and hides all controls, making it ideal for parties, classrooms, offices and live events.</p>
+    </div>
+  </div>
+</article>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Is ZeroHour really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Every feature — unlimited countdowns, shareable links, fullscreen presentation mode, festival presets — is free with no signup, no paywall and no watermark."}},
+    {"@type": "Question", "name": "Where are my saved countdowns stored?", "acceptedAnswer": {"@type": "Answer", "text": "In your browser's local storage, on your device only. They persist across restarts but are not synced between devices; clearing browser data removes them."}},
+    {"@type": "Question", "name": "How do shareable countdown links work?", "acceptedAnswer": {"@type": "Answer", "text": "The event name and target moment are encoded in the link's URL hash. Anyone opening the link sees your live countdown in their own timezone — no account needed."}},
+    {"@type": "Question", "name": "How does the Diwali preset know the right date?", "acceptedAnswer": {"@type": "Answer", "text": "ZeroHour ships with a built-in calendar of upcoming Diwali dates (which shift yearly on the lunisolar calendar) and automatically picks the next one that has not happened yet."}},
+    {"@type": "Question", "name": "What happens when my countdown reaches zero?", "acceptedAnswer": {"@type": "Answer", "text": "The stage flashes \"It's time!\", plays a short chime (mutable), then switches to elapsed mode, counting up to show how long ago the moment occurred."}},
+    {"@type": "Question", "name": "Can I use ZeroHour on a projector or TV?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — the fullscreen stage fills any screen with giant glowing digits and hides all controls, making it ideal for parties, classrooms, offices and live events."}}
+  ]
+}
+</script>
+
+<footer class="border-t border-white/10 mt-6">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
+    <span class="digits font-bold tracking-widest text-slate-300">ZERO<span class="text-red-500">HOUR</span></span>
+    <span>Free online countdown timer — no signup, no watermark.</span>
+    <a href="https://fixoraa.tech" class="hover:text-slate-300">More Tools</a>
+  </div>
+</footer>
+
+<script>
+// ZEROHOUR LOGIC START
+'use strict';
+/* Pure functions — no DOM access. Extracted by tests. */
+
+var DIWALI_DATES = [
+  '2026-11-08T00:00:00',
+  '2027-10-29T00:00:00',
+  '2028-10-17T00:00:00',
+  '2029-11-05T00:00:00',
+  '2030-10-26T00:00:00',
+  '2031-10-14T00:00:00'
+];
+
+// Break a millisecond span into days/hours/minutes/seconds. Negative => elapsed.
+function breakDown(ms) {
+  var sign = ms < 0 ? -1 : 1;
+  var total = Math.abs(Math.floor(ms / 1000));
+  var days = Math.floor(total / 86400);
+  var hours = Math.floor((total % 86400) / 3600);
+  var minutes = Math.floor((total % 3600) / 60);
+  var seconds = total % 60;
+  return { sign: sign, days: days, hours: hours, minutes: minutes, seconds: seconds, totalSeconds: total };
+}
+
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+function pad3(n) { return n < 10 ? '00' + n : (n < 100 ? '0' + n : '' + n); }
+
+function isElapsed(targetMs, nowMs) { return targetMs <= nowMs; }
+
+// Next occurrence of a fixed month/day (e.g. Christmas Dec 25, New Year Jan 1).
+function nextOccurrence(month, day, fromMs) {
+  var from = new Date(fromMs);
+  var y = from.getFullYear();
+  var cand = new Date(y, month - 1, day, 0, 0, 0, 0);
+  if (cand.getTime() <= fromMs) cand = new Date(y + 1, month - 1, day, 0, 0, 0, 0);
+  return cand.getTime();
+}
+
+// Next Diwali on/after fromMs, from the built-in festival calendar.
+function nextDiwali(fromMs) {
+  for (var i = 0; i < DIWALI_DATES.length; i++) {
+    var t = new Date(DIWALI_DATES[i]).getTime();
+    if (t > fromMs) return t;
+  }
+  return null;
+}
+
+function festivalTarget(kind, fromMs) {
+  if (kind === 'christmas') return nextOccurrence(12, 25, fromMs);
+  if (kind === 'newyear') return nextOccurrence(1, 1, fromMs);
+  if (kind === 'diwali') return nextDiwali(fromMs);
+  return null;
+}
+
+// Shareable link: name + absolute target encoded in the URL hash.
+function encodeShareHash(name, targetMs) {
+  return '#zh=n=' + encodeURIComponent(String(name).slice(0, 60)) + '&t=' + targetMs;
+}
+
+function decodeShareHash(hash) {
+  if (!hash || hash.indexOf('#zh=') !== 0) return null;
+  var body = hash.slice(4);
+  var mN = body.match(/(?:^|&)n=([^&]*)/);
+  var mT = body.match(/(?:^|&)t=(\d+)/);
+  if (!mT) return null;
+  var targetMs = parseInt(mT[1], 10);
+  if (!isFinite(targetMs) || targetMs <= 0) return null;
+  var name = '';
+  try { name = decodeURIComponent(mN ? mN[1] : ''); } catch (e) { return null; }
+  return { name: name || 'Shared countdown', targetMs: targetMs };
+}
+
+function sortByRemaining(list, nowMs) {
+  return list.slice().sort(function (a, b) { return (a.target - nowMs) - (b.target - nowMs); });
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { breakDown: breakDown, pad2: pad2, pad3: pad3, isElapsed: isElapsed,
+    nextOccurrence: nextOccurrence, nextDiwali: nextDiwali, festivalTarget: festivalTarget,
+    encodeShareHash: encodeShareHash, decodeShareHash: decodeShareHash,
+    sortByRemaining: sortByRemaining, DIWALI_DATES: DIWALI_DATES };
+}
+// ZEROHOUR LOGIC END
+</script>
+
+<script>
+(function () {
+  'use strict';
+  var LS_KEY = 'zerohour-saved-v1';
+  var LS_SOUND = 'zerohour-sound-v1';
+
+  var stage = document.getElementById('stage');
+  var stageName = document.getElementById('stageName');
+  var stageTarget = document.getElementById('stageTarget');
+  var dDays = document.getElementById('dDays'), dHours = document.getElementById('dHours');
+  var dMins = document.getElementById('dMins'), dSecs = document.getElementById('dSecs');
+  var stageStatus = document.getElementById('stageStatus');
+  var inName = document.getElementById('inName'), inDate = document.getElementById('inDate');
+  var formMsg = document.getElementById('formMsg'), shareMsg = document.getElementById('shareMsg');
+  var savedList = document.getElementById('savedList'), savedCount = document.getElementById('savedCount');
+  var btnSound = document.getElementById('btnSound');
+
+  var active = { name: 'New Year Countdown', target: festivalTarget('newyear', Date.now()) };
+  var soundOn = true;
+  try { soundOn = localStorage.getItem(LS_SOUND) !== 'off'; } catch (e) {}
+
+  function syncSoundBtn() {
+    btnSound.textContent = soundOn ? '🔔 Sound on' : '🔕 Sound off';
+    btnSound.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+  }
+  syncSoundBtn();
+  btnSound.addEventListener('click', function () {
+    soundOn = !soundOn;
+    try { localStorage.setItem(LS_SOUND, soundOn ? 'on' : 'off'); } catch (e) {}
+    syncSoundBtn();
+  });
+
+  // ---- persistence ----
+  function loadSaved() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch (e) { return []; }
+  }
+  function storeSaved(list) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  // ---- chime (Web Audio, no files) ----
+  var audioCtx = null, chimedFor = null;
+  function chime() {
+    if (!soundOn) return;
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      [523.25, 659.25, 783.99].forEach(function (f, i) {
+        var o = audioCtx.createOscillator(), g = audioCtx.createGain();
+        o.type = 'sine'; o.frequency.value = f;
+        var t0 = audioCtx.currentTime + i * 0.18;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(0.25, t0 + 0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.5);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start(t0); o.stop(t0 + 0.55);
+      });
+    } catch (e) {}
+  }
+
+  function fmtTarget(ms) {
+    var d = new Date(ms);
+    return d.toLocaleString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function setActive(name, target) {
+    active = { name: name, target: target };
+    chimedFor = null;
+    stageName.textContent = name;
+    stageTarget.textContent = 'Target: ' + fmtTarget(target);
+    stageStatus.classList.remove('flash-zero');
+    tick();
+  }
+
+  function tick() {
+    var now = Date.now();
+    var diff = active.target - now;
+    var bd = breakDown(diff);
+    if (diff > 0) {
+      dDays.textContent = pad3(bd.days);
+      dHours.textContent = pad2(bd.hours);
+      dMins.textContent = pad2(bd.minutes);
+      dSecs.textContent = pad2(bd.seconds);
+      stageStatus.textContent = 'Counting down…';
+      stageStatus.classList.remove('flash-zero');
+      document.title = '⏳ ' + bd.days + 'd ' + pad2(bd.hours) + ':' + pad2(bd.minutes) + ':' + pad2(bd.seconds) + ' — ' + active.name + ' | ZeroHour';
+    } else if (diff > -3000) {
+      dDays.textContent = '000'; dHours.textContent = '00'; dMins.textContent = '00'; dSecs.textContent = '00';
+      stageStatus.textContent = "🎉 It's time!";
+      stageStatus.classList.add('flash-zero');
+      if (chimedFor !== active.target) { chimedFor = active.target; chime(); }
+      document.title = "🎉 It's time! — " + active.name + ' | ZeroHour';
+    } else {
+      dDays.textContent = pad3(bd.days);
+      dHours.textContent = pad2(bd.hours);
+      dMins.textContent = pad2(bd.minutes);
+      dSecs.textContent = pad2(bd.seconds);
+      stageStatus.textContent = 'Elapsed since ' + fmtTarget(active.target) + ' — counting up';
+      document.title = '⌛ +' + bd.days + 'd ' + pad2(bd.hours) + ':' + pad2(bd.minutes) + ':' + pad2(bd.seconds) + ' — ' + active.name + ' | ZeroHour';
+    }
+  }
+  setInterval(tick, 1000);
+
+  // ---- saved countdowns ----
+  function renderSaved() {
+    var now = Date.now();
+    var list = sortByRemaining(loadSaved(), now);
+    savedCount.textContent = list.length ? list.length + ' saved' : '';
+    if (!list.length) {
+      savedList.innerHTML = '<p class="text-sm text-slate-500 border border-dashed border-white/15 rounded-lg p-5 text-center">No saved countdowns yet.<br>Create one and press "Save for later".</p>';
+      return;
+    }
+    savedList.innerHTML = '';
+    list.forEach(function (item) {
+      var bd = breakDown(item.target - now);
+      var left = item.target > now
+        ? bd.days + 'd ' + pad2(bd.hours) + 'h ' + pad2(bd.minutes) + 'm'
+        : 'elapsed ' + bd.days + 'd';
+      var card = document.createElement('div');
+      card.className = 'rounded-xl border border-white/10 bg-black/30 p-3.5';
+      var title = document.createElement('div');
+      title.className = 'font-semibold text-white text-sm truncate';
+      title.textContent = item.name;
+      var meta = document.createElement('div');
+      meta.className = 'mt-0.5 text-xs text-slate-400';
+      meta.textContent = left + ' · ' + fmtTarget(item.target);
+      var row = document.createElement('div');
+      row.className = 'mt-2.5 flex flex-wrap gap-2';
+      [['Load', 'load'], ['Share', 'share'], ['Delete', 'del']].forEach(function (cfg) {
+        var b = document.createElement('button');
+        b.textContent = cfg[0];
+        b.className = cfg[1] === 'del'
+          ? 'rounded-md border border-red-900/60 px-3 py-1 text-xs font-semibold text-red-300 hover:bg-red-950/50'
+          : 'rounded-md border border-white/15 px-3 py-1 text-xs font-semibold text-slate-200 hover:bg-white/10';
+        b.addEventListener('click', function () {
+          if (cfg[1] === 'load') setActive(item.name, item.target);
+          else if (cfg[1] === 'share') copyShare(item.name, item.target, shareMsg);
+          else if (confirm('Delete "' + item.name + '"?')) {
+            storeSaved(loadSaved().filter(function (x) { return x.id !== item.id; }));
+            renderSaved();
+          }
+        });
+        row.appendChild(b);
+      });
+      card.appendChild(title); card.appendChild(meta); card.appendChild(row);
+      savedList.appendChild(card);
+    });
+  }
+
+  function copyShare(name, target, msgEl) {
+    var url = location.href.split('#')[0] + encodeShareHash(name, target);
+    function done() { msgEl.textContent = '✓ Share link copied — anyone opening it sees this countdown live.'; setTimeout(function(){ msgEl.textContent=''; }, 4000); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, function () { prompt('Copy your countdown link:', url); });
+    } else { prompt('Copy your countdown link:', url); }
+  }
+
+  function readForm() {
+    var name = inName.value.trim() || 'Untitled countdown';
+    var v = inDate.value;
+    if (!v) { formMsg.textContent = 'Please pick a date and time first.'; return null; }
+    var t = new Date(v).getTime();
+    if (!isFinite(t)) { formMsg.textContent = 'That date could not be understood — try again.'; return null; }
+    formMsg.textContent = '';
+    return { name: name, target: t };
+  }
+
+  document.getElementById('btnStart').addEventListener('click', function () {
+    var r = readForm(); if (r) setActive(r.name, r.target);
+  });
+  document.getElementById('btnAdd').addEventListener('click', function () {
+    var r = readForm(); if (!r) return;
+    var list = loadSaved();
+    list.push({ id: 'zh' + Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36), name: r.name, target: r.target });
+    storeSaved(list); renderSaved();
+    formMsg.textContent = '✓ Saved — find it in your countdowns on the right.';
+  });
+  document.getElementById('btnSaveStage').addEventListener('click', function () {
+    var list = loadSaved();
+    list.push({ id: 'zh' + Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36), name: active.name, target: active.target });
+    storeSaved(list); renderSaved();
+    shareMsg.textContent = '✓ Saved to your countdowns.';
+    setTimeout(function(){ shareMsg.textContent=''; }, 3000);
+  });
+  document.getElementById('btnShareStage').addEventListener('click', function () {
+    copyShare(active.name, active.target, shareMsg);
+  });
+  document.getElementById('btnFullscreen').addEventListener('click', function () {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (stage.requestFullscreen) stage.requestFullscreen();
+  });
+
+  document.querySelectorAll('[data-quick]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var secs = parseInt(b.getAttribute('data-quick'), 10);
+      var name = inName.value.trim() || (secs >= 86400 ? (secs / 86400) + '-day timer' : (secs / 3600) + '-hour timer');
+      setActive(name, Date.now() + secs * 1000);
+    });
+  });
+
+  var FEST_NAMES = { diwali: 'Diwali', christmas: 'Christmas', newyear: 'New Year' };
+  function paintFestivalLabels() {
+    var now = Date.now();
+    var map = { diwali: 'diwaliDate', christmas: 'christmasDate', newyear: 'newyearDate' };
+    Object.keys(map).forEach(function (k) {
+      var t = festivalTarget(k, now);
+      var el = document.getElementById(map[k]);
+      if (el && t) el.textContent = '· ' + new Date(t).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    });
+  }
+  document.querySelectorAll('[data-fest]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var k = b.getAttribute('data-fest');
+      var t = festivalTarget(k, Date.now());
+      if (!t) { formMsg.textContent = 'Festival calendar is out of range — pick a date manually.'; return; }
+      setActive(FEST_NAMES[k] + ' ' + new Date(t).getFullYear(), t);
+    });
+  });
+
+  // ---- deep link on load ----
+  function boot() {
+    var shared = decodeShareHash(location.hash);
+    if (shared) {
+      setActive(shared.name, shared.target);
+      shareMsg.textContent = 'Opened from a shared link — press "Save this countdown" to keep it.';
+    } else {
+      setActive(active.name, active.target);
+    }
+    paintFestivalLabels();
+    renderSaved();
+  }
+  boot();
+})();
+</script>
+</body>
+</html>
